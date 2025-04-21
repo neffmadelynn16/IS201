@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pixel Art Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: rgb(202, 218, 232); /* Updated background color */
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #homeBtn, #scratchBtn {
+      display: inline-block;
+      background-color: rgb(102, 104, 148);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: background-color 0.3s;
+    }
+
+    #homeBtn:hover, #scratchBtn:hover {
+      background-color: #0056b3;
+    }
+
+    #controls {
+      margin-bottom: 20px;
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(16, 20px);
+      grid-template-rows: repeat(16, 20px);
+      gap: 1px;
+      background-color: #ccc;
+    }
+
+    .pixel {
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      cursor: pointer;
+      transition: background-color 0.1s;
+    }
+
+    input[type="color"] {
+      margin-left: 10px;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    #ideaBox {
+      margin-top: 20px;
+      background: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    #prompt {
+      font-style: italic;
+      color: #333;
+    }
+
+    #downloadInstructions {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Home Page Link -->
+  <a href="../index.html" id="homeBtn">Home Page</a>
+
+  <!-- Scratch Page Link -->
+  <a href="scratch.html" id="scratchBtn">Go to Scratch</a>
+
+  <h1>Pixel Art Generator</h1>
+  
+  <div id="controls">
+    <label>Pick Color: <input type="color" id="colorPicker" value="#000000" /></label>
+    <button id="clearBtn">Clear</button>
+    <button id="downloadBtn">Download Art</button>
+  </div>
+
+  <div id="grid"></div>
+
+  <div id="ideaBox">
+    <p><strong>Need inspiration?</strong></p>
+    <p id="prompt">Draw a smiley face 🙂</p>
+    <button id="nextIdeaBtn">Next Idea</button>
+  </div>
+
+  <div id="downloadInstructions">
+  </div>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const colorPicker = document.getElementById('colorPicker');
+    const clearBtn = document.getElementById('clearBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const prompt = document.getElementById('prompt');
+    const nextIdeaBtn = document.getElementById('nextIdeaBtn');
+
+    const ideas = [
+      "Draw a rainbow 🌈",
+      "Make a heart ❤️",
+      "Design a spaceship 🚀",
+      "Create a checkerboard",
+      "Draw a cat 🐱",
+      "Design your initials",
+      "Make a sunset 🌇",
+      "Draw a flower 🌸",
+      "Create a pixel house 🏠",
+      "Draw a smiley face 🙂",
+      "Design a crown 👑",
+      "Make a campfire 🔥",
+    ];
+
+    // Create pixel grid
+    for (let i = 0; i < 16 * 16; i++) {
+      const pixel = document.createElement('div');
+      pixel.classList.add('pixel');
+      grid.appendChild(pixel);
+
+      pixel.addEventListener('click', () => {
+        pixel.style.backgroundColor = colorPicker.value;
+      });
+    }
+
+    // Clear grid
+    clearBtn.addEventListener('click', () => {
+      const pixels = document.querySelectorAll('.pixel');
+      pixels.forEach(p => p.style.backgroundColor = 'white');
+    });
+
+    // Show random idea
+    nextIdeaBtn.addEventListener('click', () => {
+      const randomIndex = Math.floor(Math.random() * ideas.length);
+      prompt.textContent = ideas[randomIndex];
+    });
+
+    // Download art
+    downloadBtn.addEventListener('click', () => {
+      html2canvas(grid).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'pixel-art.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+
+    // Add html2canvas library
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    document.body.appendChild(script);
+  </script>
+
+</body>
+</html>
